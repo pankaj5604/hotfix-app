@@ -19,7 +19,7 @@ class EmployeeController extends Controller
             'mobile' => 'required|string|unique:employees,mobile',
             'profile_pic' => 'nullable|string',
             'gender' => 'nullable|in:male,female',
-            'status' => 'required|in:active,inactive',
+            'status' => 'nullable|in:active,inactive',
         ]);
 
         $employee = Employee::create($data);
@@ -27,9 +27,34 @@ class EmployeeController extends Controller
         return response()->json($employee, 201);
     }
 
-    public function show(Employee $employee)
+    public function show(Request $request, Employee $employee)
     {
-        return response()->json($employee);
+        $fromDate = $request->query('from_date');
+        $toDate   = $request->query('to_date');
+
+        // Load works with date filter + product relation
+        $works = $employee->works()
+            ->when($fromDate, fn($q) => $q->whereDate('work_date', '>=', $fromDate))
+            ->when($toDate, fn($q) => $q->whereDate('work_date', '<=', $toDate))
+            ->with('product')
+            ->get();
+
+        // Calculate totals
+        $mainTotalProduct   = $works->sum('product_total');
+        $mainTotalEmployee  = $works->sum('employee_total');
+        $mainTotalSadi      = $works->sum('total_sadi');
+
+        return response()->json([
+            'id'                  => $employee->id,
+            'name'                => $employee->name,
+            'mobile'              => $employee->mobile,
+            'gender'              => $employee->gender,
+            'status'              => $employee->status,
+            'works'               => $works,
+            'main_total_product'  => $mainTotalProduct,
+            'main_total_employee' => $mainTotalEmployee,
+            'main_total_sadi'     => $mainTotalSadi,
+        ]);
     }
 
     public function update(Request $request, Employee $employee)
@@ -39,7 +64,7 @@ class EmployeeController extends Controller
             'mobile' => 'sometimes|string|unique:employees,mobile,' . $employee->id,
             'profile_pic' => 'nullable|string',
             'gender' => 'nullable|in:male,female',
-            'status' => 'sometimes|in:active,inactive',
+            'status' => 'nullable|in:active,inactive',
         ]);
 
         $employee->update($data);

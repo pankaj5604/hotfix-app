@@ -16,4 +16,9 @@ class Employee extends Model
         'profile_pic',
         'status',
     ];
+
+    public function works()
+    {
+        return $this->hasMany(EmployeeWork::class, 'employee_id');
+    }
 }
