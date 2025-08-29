@@ -9,20 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+   public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            //
+            $table->decimal('product_rate', 10, 2)->default(0)->after('type');
+            $table->decimal('employee_rate', 10, 2)->default(0)->after('product_rate');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            //
+            $table->dropColumn(['product_rate', 'employee_rate']);
         });
     }
+
 };

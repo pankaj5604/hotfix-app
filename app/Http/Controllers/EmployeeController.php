@@ -37,6 +37,7 @@ class EmployeeController extends Controller
             ->when($fromDate, fn($q) => $q->whereDate('work_date', '>=', $fromDate))
             ->when($toDate, fn($q) => $q->whereDate('work_date', '<=', $toDate))
             ->with('product')
+            ->orderBy('work_date', 'asc')
             ->get();
 
         // Calculate totals

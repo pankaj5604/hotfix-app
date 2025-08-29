@@ -11,6 +11,8 @@ class Product extends Model
 
     protected $fillable = [
         'type',
+        'product_rate',
+        'employee_rate'
     ];
 
     public function works()
