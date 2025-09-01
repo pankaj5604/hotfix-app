@@ -15,10 +15,14 @@ Route::middleware('auth:sanctum')->group(function () {
     // Products
     Route::get('/products', [ProductController::class, 'index']);
     Route::post('/products', [ProductController::class, 'store']); // bulk add
+    Route::get('/products/{id}', [ProductController::class, 'show']);
     Route::put('/products/{product}', [ProductController::class, 'update']);
 
     // Employee Work
     Route::get('/employee-work', [EmployeeWorkController::class, 'index']);
     Route::post('/employee-work', [EmployeeWorkController::class, 'store']);
+    Route::get('/employee-work/{id}', [EmployeeWorkController::class, 'show']);
     Route::put('/employee-work/{employeeWork}', [EmployeeWorkController::class, 'update']);
 });
+
+Route::get('employee/details/{id}', [EmployeeController::class, 'showPublic']);

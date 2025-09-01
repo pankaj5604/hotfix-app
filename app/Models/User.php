@@ -38,4 +38,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'admin_id');
+    }
+
+    public function employees()
+    {
+        return $this->hasMany(Employee::class, 'admin_id');
+    }
+
+    public function works()
+    {
+        return $this->hasMany(EmployeeWork::class, 'admin_id');
+    }
 }

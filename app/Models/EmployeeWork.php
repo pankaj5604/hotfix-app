@@ -13,6 +13,7 @@ class EmployeeWork extends Model
      protected $table = 'employee_work';
 
     protected $fillable = [
+        'created_by',
         'employee_id',
         'product_id',
         'employee_rate',

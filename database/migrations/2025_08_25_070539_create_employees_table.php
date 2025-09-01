@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->string('name');                     // Employee name
-            $table->string('mobile')->unique();         // Mobile number
+            $table->string('mobile')->nullable();         // Mobile number
             $table->string('profile_pic')->nullable();  // Profile picture path
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active'); // Status
