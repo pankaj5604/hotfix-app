@@ -22,4 +22,9 @@ class Employee extends Model
     {
         return $this->hasMany(EmployeeWork::class, 'employee_id');
     }
+
+    public function advances()
+    {
+        return $this->hasMany(EmployeeAdvance::class);
+    }
 }

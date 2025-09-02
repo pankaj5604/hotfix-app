@@ -59,6 +59,15 @@ class EmployeeController extends Controller
             ->orderBy('work_date', 'asc')
             ->get();
 
+         $advances = $employee->advances()
+        ->when($fromDate, fn($q) => $q->whereDate('advance_date', '>=', $fromDate))
+        ->when($toDate, fn($q) => $q->whereDate('advance_date', '<=', $toDate))
+        ->get();
+
+        $totalAdvance = $advances->sum('amount');
+        $mainTotalEmployee = $works->sum('employee_total');
+        $totalPay = $mainTotalEmployee - $totalAdvance;    
+
         return response()->json([
             'id'                  => $employee->id,
             'name'                => $employee->name,
@@ -69,6 +78,8 @@ class EmployeeController extends Controller
             'main_total_product'  => $works->sum('product_total'),
             'main_total_employee' => $works->sum('employee_total'),
             'main_total_sadi'     => $works->sum('total_sadi'),
+            'total_advance'       => $totalAdvance,
+            'total_pay'           => $totalPay,
         ]);
     }
 
@@ -86,6 +97,15 @@ class EmployeeController extends Controller
             ->orderBy('work_date', 'asc')
             ->get();
 
+        $advances = $employee->advances()
+        ->when($fromDate, fn($q) => $q->whereDate('advance_date', '>=', $fromDate))
+        ->when($toDate, fn($q) => $q->whereDate('advance_date', '<=', $toDate))
+        ->get();
+
+        $totalAdvance       = $advances->sum('amount');
+        $mainTotalEmployee  = $works->sum('employee_total');
+        $totalPay           = $mainTotalEmployee - $totalAdvance;    
+
         return response()->json([
             'id'                  => $employee->id,
             'name'                => $employee->name,
@@ -96,6 +116,8 @@ class EmployeeController extends Controller
             'main_total_product'  => $works->sum('product_total'),
             'main_total_employee' => $works->sum('employee_total'),
             'main_total_sadi'     => $works->sum('total_sadi'),
+            'total_advance'       => $totalAdvance,
+            'total_pay'           => $totalPay,
         ]);
     }
 
